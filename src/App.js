@@ -4,6 +4,9 @@ import Timer from "react-compound-timer";
 import React from "react";
 import TimeField from "react-simple-timefield";
 
+
+let count = 0
+
 function convertTime(time) {
   const hour = time.substring(0, 2);
   const minute = time.substring(3, 5);
@@ -12,20 +15,29 @@ function convertTime(time) {
   return ms;
 }
 
+
+
 class CountDownTimer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      time: "12:00:00"
+      time: "12:00:00",
     }
-    this.onTimeChange = this.onTimeChange.bind(this)
+    this.onTimeChange = this.onTimeChange.bind(this);
   }
   onTimeChange(event, time) {
+    this.setState({ time})
+    count++
+    console.log(count)
+  }
+
+  getInitialTime(time) {
     console.log(time)
-    this.setState({ time })
-    console.log(time)
-    }
-    
+    return (
+      convertTime(time)
+    )
+}
+
   render() {
     const { time } = this.state
     return (
@@ -33,18 +45,17 @@ class CountDownTimer extends React.Component {
         <div>
           <TimeField value={time} onChange={this.onTimeChange} showSeconds />
         </div>
-        <p>{time}</p>
         <h3>
           <Timer
-            initialTime={convertTime(time)}
+            initialTime={this.getInitialTime(time)}
             direction="backward"
             startImmediately={false}
-          >
-            {({ start, resume, pause, stop, reset, set }) => (
+            >
+            
+            {({ start, resume, pause, stop, reset }) => (
               <React.Fragment>
                 <div>
                   <Timer.Hours /> h <Timer.Minutes /> m <Timer.Seconds /> s
-                    <button onClick{() => console}>Enter</button>
                 </div>
                 <br />
                 <div>
