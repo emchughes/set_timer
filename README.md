@@ -1,2 +1,2 @@
-# set_timer
+# time-picker-timer
 Created with CodeSandbox
