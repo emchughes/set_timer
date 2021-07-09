@@ -11,7 +11,7 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      time: 10000000,
+      time: "10000000",
       // seconds: 5,
       start:  10000000,
       isOn: false
@@ -24,8 +24,6 @@ class Timer extends React.Component {
     // this.countDown = this.countDown.bind(this)
   }
   startTimer() {
-    this.setState({ isOn: true });
-
     this.setState({
       time: this.state.time,
       start: 10000000,
@@ -58,13 +56,26 @@ class Timer extends React.Component {
     this.setState({ time });
   }
   convertTime(time) {
-    console.log("convertTime time: " + time);
-    const hour = time.substring(0, 2);
-    const minute = time.substring(3, 5);
-    const second = time.substring(6, 8);
-    let setTime = hour + "h " + minute + "m " + second + "s";
-    console.log(setTime);
-    return setTime;
+    let stringTime = ""
+    //time is in miliseconds
+    console.log(time)
+    let miliseconds = time
+    //time = 10,000,000
+    let seconds = Math.floor((miliseconds/1000) - Math.floor(miliseconds/60000) * 60)
+    //sec = 10,000
+    let minutes = Math.floor((miliseconds/60000) - Math.floor(miliseconds/3600000) * 60)
+    //minute = 166.67
+    let hours = Math.floor((miliseconds/3600000) - Math.floor(miliseconds/854000000) * 24)
+    // hours = 2.78
+    let days = Math.floor((miliseconds/854000000) - Math.floor(miliseconds/31540000000) * 365)
+    // 0 days
+    let years = Math.floor(miliseconds/31540000000)
+    stringTime = (years > 0 ? years + ":" : null) + 
+                  (days > 0 ? days + ":": null) + 
+                  (hours > 0 ? hours + ":" : null) +
+                  (minutes > 0 ? minutes + ":" : null)+
+                  seconds
+    return (stringTime)
   }
 
   // secondsToTime(secs){
@@ -106,7 +117,7 @@ class Timer extends React.Component {
   // }
 
   render() {
-    // const { time } = this.state
+    const { time } = this.state
     let start =
       this.state.time !== 0 ? (
         <button onClick={this.startTimer}>start</button>
@@ -125,8 +136,8 @@ class Timer extends React.Component {
     return (
       <div>
         <div>
-          {/* <TimeField value={time} onChange={this.onTimeChange} showSeconds /> */}
-          <h3>timer: {ms(this.state.time)}</h3>
+          <TimeField value={time} onChange={this.onTimeChange} showSeconds />
+          <h3>timer: {this.convertTime(time)}</h3>
         </div>
         {start}
         {resume}
